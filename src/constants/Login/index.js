@@ -1,0 +1,10 @@
+import Config from "react-native-config";
+export const TOAST_USER_NAME_NOT_EMPTY = "用户名不能为空！";
+export const TOAST_PASSWORD_NOT_EMPTY = "密码不能为空！";
+export const TOAST_LOGIN_SUCCESS = "登录成功！";
+export const TOAST_LOGIN_FAIL = "登录失败！";
+export const AUTH_SCOPES = ["user", "repo", "gist", "notifications"];
+export const AUTH_NOTE = Config.NOTE;
+export const AUTH_NOTE_URL = Config.Note_URL;
+export const AUTH_CLIENT_ID = Config.CLIENT_ID;
+export const AUTH_CLIENT_SECRET = Config.CLIENT_SECRET;
