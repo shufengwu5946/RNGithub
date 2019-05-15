@@ -4,7 +4,8 @@ import {
   TouchableNativeFeedback,
   Text,
   Clipboard,
-  FlatList
+  FlatList,
+  ScrollView
 } from "react-native";
 import styles from "./RepoDetailStyles";
 import Info from "./TabView/components/Info";
@@ -18,7 +19,7 @@ import ShareAndroid from "~/components/ShareAndroid";
 import BrowserOpenAndroid from "~/components/BrowserOpenAndroid";
 import toast from "~/utils/ToastUtils";
 import { fetchGet, fetchPut, fetchDelete } from "../../../fetch";
-import { STAR_URL } from "../../../constants/Fetch";
+import { STAR_URL, BRANCHES_URL, TAGS_URL } from "../../../constants/Fetch";
 import Modal from "react-native-modal";
 import Button from "react-native-button";
 
@@ -79,11 +80,11 @@ export default class RepoDetail extends Component {
   };
 
   showBranchModal = () => {
-    this.setState({ branchModalVisible: true });
-    // if (this.state.branchTagList.length === 0) {
-    // } else {
-    //   this.setState({ branchModalVisible: true });
-    // }
+    if (this.state.branchList.length === 0) {
+      this.getBranchesAndTags();
+    } else {
+      this.setState({ branchModalVisible: true });
+    }
   };
 
   starRepo = () => {
@@ -156,6 +157,22 @@ export default class RepoDetail extends Component {
       });
   };
 
+  getBranchesAndTags = () => {
+    fetchGet(BRANCHES_URL, {}, {})
+      .then(branches => {
+        fetchGet(TAGS_URL, {}, {}).then(tags => {
+          this.setState({
+            branchList: branches,
+            tagList: tags,
+            branchModalVisible: true
+          });
+        });
+      })
+      .catch(error => {
+        console.log(error);
+      });
+  };
+
   constructor(props) {
     super(props);
     this.state = {
@@ -163,7 +180,8 @@ export default class RepoDetail extends Component {
       modalMenuVisible: false,
       branchModalVisible: false,
       defaultBranch: props.navigation.getParam("defaultBranch", ""),
-      branchTagList: []
+      branchList: [],
+      tagList: []
     };
   }
 
@@ -271,19 +289,23 @@ export default class RepoDetail extends Component {
         <Modal isVisible={this.state.branchModalVisible}>
           <View style={styles.branchModal}>
             <Text style={styles.branchModalTitle}>选择分支或标签</Text>
-            <FlatList
-              data={[
-                { name: "Devin" },
-                { name: "Jackson" },
-                { name: "James" },
-                { name: "Joel" },
-                { name: "John" }
-              ]}
-              renderItem={({ item }) => (
-                <Text style={styles.item}>{item.name}</Text>
-              )}
-              keyExtractor={(item, index) => index}
-            />
+            <ScrollView>
+              <FlatList
+                data={this.state.branchList}
+                renderItem={({ item }) => (
+                  <Text style={styles.item}>{item.name}</Text>
+                )}
+                keyExtractor={(item, index) => index}
+              />
+              <FlatList
+                data={this.state.tagList}
+                renderItem={({ item }) => (
+                  <Text style={styles.item}>{item.name}</Text>
+                )}
+                keyExtractor={(item, index) => index}
+              />
+            </ScrollView>
+
             <Button
               style={styles.branchModalButton}
               onPress={() => this.setState({ branchModalVisible: false })}

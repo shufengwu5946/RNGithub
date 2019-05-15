@@ -30,14 +30,14 @@ export default class UserTabView extends React.Component {
           <TabBar
             {...props}
             indicatorStyle={{ backgroundColor: "green" }}
-            style={{ backgroundColor: "white" }}
+            style={{ backgroundColor: 'white' }}
             labelStyle={{
-              textTransform: "capitalize",
               fontSize: scaleSize(30),
             }}
             activeColor="green"
             inactiveColor="gray"
             contentContainerStyle={{ height: scaleSize(100) }}
+            
           />
         )}
         renderLazyPlaceholder={this._renderLazyPlaceholder}
@@ -45,5 +45,3 @@ export default class UserTabView extends React.Component {
     );
   }
 }
-
-

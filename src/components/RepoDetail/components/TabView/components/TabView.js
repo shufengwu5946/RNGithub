@@ -80,7 +80,6 @@ export default class TabView extends React.Component {
             indicatorStyle={{ backgroundColor: "green" }}
             style={{ backgroundColor: "white" }}
             labelStyle={{
-              textTransform: "capitalize",
               fontSize: scaleSize(30)
             }}
             activeColor="green"
