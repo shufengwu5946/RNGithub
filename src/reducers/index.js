@@ -17,6 +17,7 @@ import {
   followingCount,
   reposCount
 } from "./Main/User/UserTabView/InfoPage";
+import { loadingDialog } from "./Common";
 
 const reducer = combineReducers({
   userName,
@@ -34,7 +35,8 @@ const reducer = combineReducers({
   createdAt,
   followersCount,
   followingCount,
-  reposCount
+  reposCount,
+  loadingDialog
 });
 
 export default reducer;

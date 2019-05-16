@@ -5,7 +5,8 @@ import {
   Text,
   Clipboard,
   FlatList,
-  ScrollView
+  ScrollView,
+  TouchableOpacity
 } from "react-native";
 import styles from "./RepoDetailStyles";
 import Info from "./TabView/components/Info";
@@ -158,23 +159,42 @@ export default class RepoDetail extends Component {
   };
 
   getBranchesAndTags = () => {
-    fetchGet(BRANCHES_URL, {}, {})
+    this.props.showLoadingDialog();
+    fetchGet(
+      BRANCHES_URL(
+        this.props.navigation.getParam("author", ""),
+        this.props.navigation.getParam("title", "")
+      ),
+      {},
+      {}
+    )
       .then(branches => {
-        fetchGet(TAGS_URL, {}, {}).then(tags => {
+        fetchGet(
+          TAGS_URL(
+            this.props.navigation.getParam("author", ""),
+            this.props.navigation.getParam("title", "")
+          ),
+          {},
+          {}
+        ).then(tags => {
           this.setState({
             branchList: branches,
             tagList: tags,
             branchModalVisible: true
           });
+          this.props.dismissLoadingDialog();
         });
       })
       .catch(error => {
+        this.props.dismissLoadingDialog();
         console.log(error);
       });
   };
 
   constructor(props) {
     super(props);
+    console.log(props.navigation.getParam("defaultBranch", ""));
+
     this.state = {
       page: 0,
       modalMenuVisible: false,
@@ -210,7 +230,13 @@ export default class RepoDetail extends Component {
     return (
       <View style={styles.container}>
         <View />
-        <TabView title={title} author={author} description={description} />
+        <TabView
+          title={title}
+          author={author}
+          description={description}
+          showLoadingDialog={this.props.showLoadingDialog}
+          dismissLoadingDialog={this.props.dismissLoadingDialog}
+        />
         <Menu ref={this.setMenuRef} style={styles.menu}>
           <MenuItem
             onPress={() => {
@@ -293,14 +319,20 @@ export default class RepoDetail extends Component {
               <FlatList
                 data={this.state.branchList}
                 renderItem={({ item }) => (
-                  <Text style={styles.item}>{item.name}</Text>
+                  <BranchTagListItem
+                    type={"branch"}
+                    name={item.name}
+                    checked={
+                      item.name === this.state.defaultBranch ? true : false
+                    }
+                  />
                 )}
                 keyExtractor={(item, index) => index}
               />
               <FlatList
                 data={this.state.tagList}
                 renderItem={({ item }) => (
-                  <Text style={styles.item}>{item.name}</Text>
+                  <BranchTagListItem type={"tag"} name={item.name} />
                 )}
                 keyExtractor={(item, index) => index}
               />
@@ -318,3 +350,31 @@ export default class RepoDetail extends Component {
     );
   }
 }
+
+const BranchTagListItem = props => (
+  <TouchableOpacity>
+    <View
+      style={{
+        ...styles.branchTagListItem,
+        backgroundColor: props.checked ? "#DDDDDD" : "white"
+      }}
+    >
+      {props.type === "branch" ? (
+        <Icon
+          name="fork"
+          size={scaleSize(50)}
+          color="green"
+          style={{ marginLeft: scaleSize(25), marginRight: scaleSize(25) }}
+        />
+      ) : (
+        <MaterialCommunityIcon
+          name="tag-outline"
+          size={scaleSize(50)}
+          color="green"
+          style={{ marginLeft: scaleSize(25), marginRight: scaleSize(25) }}
+        />
+      )}
+      <Text style={styles.item}>{props.name}</Text>
+    </View>
+  </TouchableOpacity>
+);

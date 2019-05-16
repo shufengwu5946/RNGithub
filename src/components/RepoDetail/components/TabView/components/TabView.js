@@ -41,6 +41,8 @@ export default class TabView extends React.Component {
                   title={this.props.title}
                   author={this.props.author}
                   description={this.props.description}
+                  showLoadingDialog={this.props.showLoadingDialog}
+                  dismissLoadingDialog = {this.props.dismissLoadingDialog}
                 />
               );
             case "file":

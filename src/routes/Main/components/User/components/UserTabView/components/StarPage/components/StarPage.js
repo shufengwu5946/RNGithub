@@ -20,6 +20,7 @@ const listItemFunc = ({ item }) => (
     forkNumber={item.forks_count}
     size={item.size}
     htmlUrl={item.html_url}
+    defaultBranch={item.default_branch}
   />
 );
 

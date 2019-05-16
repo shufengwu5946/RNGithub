@@ -15,7 +15,7 @@ export const CONTENTS_URL = (owner, repo, path) =>
   `https://api.github.com/repos/${owner}/${repo}/contents/${path}`;
 export const STAR_URL = (owner, repo) =>
   `https://api.github.com/user/starred/${owner}/${repo}`;
-export const TAGS_URL =
-  "https://api.github.com/repos/facebook/react-native/tags";
-export const BRANCHES_URL =
-  "https://api.github.com/repos/facebook/react-native/branches";
+export const TAGS_URL = (owner, repo) =>
+  `https://api.github.com/repos/${owner}/${repo}/tags`;
+export const BRANCHES_URL = (owner, repo) =>
+  `https://api.github.com/repos/${owner}/${repo}/branches`;

@@ -51,9 +51,8 @@ export default function withRefreshList(listItemFunc, fetchFunc) {
   return class extends React.Component {
     constructor(props) {
       super(props);
-      const data = [];
       this.state = {
-        data: data,
+        data: [],
         refreshing: false,
         page: 1,
         loadMoreFinish: false
@@ -102,6 +101,8 @@ export default function withRefreshList(listItemFunc, fetchFunc) {
     }
 
     render() {
+      console.log(this.state.data);
+      
       return (
         <View>
           <FlatList

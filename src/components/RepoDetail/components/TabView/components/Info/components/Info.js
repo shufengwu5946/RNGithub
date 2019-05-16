@@ -16,6 +16,7 @@ export default class Info extends Component {
 
   componentDidMount() {
     // Alert.alert("hehe");
+    this.props.showLoadingDialog();
     fetchGet(
       README_URL(this.props.title, this.props.author),
       { Accept: "application/vnd.github.VERSION.html" },
@@ -26,8 +27,10 @@ export default class Info extends Component {
           readme: data,
           title: this.props.title
         });
+        this.props.dismissLoadingDialog();
       })
       .catch(error => {
+        this.props.dismissLoadingDialog();
         console.error(error);
       });
   }

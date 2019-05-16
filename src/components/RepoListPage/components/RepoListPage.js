@@ -11,19 +11,22 @@ import styles from "./RepoListPageStyles";
 import { HeaderBackButton } from "react-navigation";
 import { fetchGet } from "../../../fetch";
 
-const listItemFunc = ({ item }) => (
-  <RepoListItem
-    title={item.name}
-    imageUrl={item.owner.avatar_url}
-    language={item.language}
-    description={item.description}
-    author={item.owner.login}
-    starNumber={item.stargazers_count}
-    forkNumber={item.forks_count}
-    size={item.size}
-    defaultBranch={item.default_branch}
-  />
-);
+const listItemFunc = ({ item }) => {
+  
+  return (
+    <RepoListItem
+      title={item.name}
+      imageUrl={item.owner.avatar_url}
+      language={item.language}
+      description={item.description}
+      author={item.owner.login}
+      starNumber={item.stargazers_count}
+      forkNumber={item.forks_count}
+      size={item.size}
+      defaultBranch={item.default_branch}
+    />
+  );
+};
 
 const fetchFunc = aimPage =>
   retrieveData([LOGIN_DATA]).then(datas => {

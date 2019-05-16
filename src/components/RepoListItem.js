@@ -24,6 +24,18 @@ export default class RepoListItem extends Component {
       htmlUrl,
       defaultBranch
     } = this.props;
+
+    console.log(title);
+    console.log(imageUrl);
+    console.log(language);
+    console.log(description);
+    console.log(starNumber);
+    console.log(forkNumber);
+    console.log(author);
+    console.log(size);
+    console.log(htmlUrl);
+    console.log(defaultBranch);
+    
     return (
       <CardView
         style={{

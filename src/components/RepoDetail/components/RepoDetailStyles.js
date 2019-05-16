@@ -36,6 +36,15 @@ const styles = StyleSheet.create({
     backgroundColor: "white",
     marginTop: scaleSize(20),
     marginBottom: scaleSize(20)
+  },
+  branchTagListItem: {
+    flexDirection: "row",
+    alignItems: "center",
+    height: scaleSize(100)
+  },
+  item: {
+    fontSize: scaleSize(30),
+    color: "black"
   }
 });
 
