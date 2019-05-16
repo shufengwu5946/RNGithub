@@ -352,7 +352,11 @@ export default class RepoDetail extends Component {
 }
 
 const BranchTagListItem = props => (
-  <TouchableOpacity>
+  <TouchableOpacity
+    onPress={() => {
+      
+    }}
+  >
     <View
       style={{
         ...styles.branchTagListItem,

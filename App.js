@@ -33,7 +33,8 @@ class App extends Component {
               style={{
                 flexDirection: "column",
                 width: scaleSize(400),
-                alignItems: "center"
+                alignItems: "center",
+                paddingTop: scaleSize(30)
               }}
             >
               <ProgressBarAndroid />

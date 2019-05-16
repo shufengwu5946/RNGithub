@@ -14,7 +14,7 @@ export default class Info extends Component {
     };
   }
 
-  componentDidMount() {
+  getReadme() {
     // Alert.alert("hehe");
     this.props.showLoadingDialog();
     fetchGet(
@@ -27,12 +27,16 @@ export default class Info extends Component {
           readme: data,
           title: this.props.title
         });
-        this.props.dismissLoadingDialog();
+        // this.props.dismissLoadingDialog();
       })
       .catch(error => {
         this.props.dismissLoadingDialog();
         console.error(error);
       });
+  }
+
+  componentDidMount() {
+    this.getReadme();
   }
   render() {
     return (
@@ -43,7 +47,11 @@ export default class Info extends Component {
           </Text>
           <Text style={styles.description}>{this.props.description}</Text>
         </View>
-        <Readme readme={this.state.readme} />
+        <Readme
+          readme={this.state.readme}
+          showLoadingDialog={this.props.showLoadingDialog}
+          dismissLoadingDialog={this.props.dismissLoadingDialog}
+        />
       </ScrollView>
     );
   }
@@ -98,6 +106,20 @@ class Readme extends Component {
             }}
             onMessage={event => this.onMessage(event)}
             injectedJavaScript={this.getHtmlHeight}
+            onLoadStart={() => {
+              {
+                /* this.props.showLoadingDialog(); */
+              }
+            }}
+            onLoad={() => {}}
+            onLoadEnd={() => {
+              if (this.props.readme !== "") {
+                this.props.dismissLoadingDialog();
+              }
+            }}
+            onError={() => {
+              Alert.alert("README 加载失败！");
+            }}
           />
         </View>
       </ScrollView>
