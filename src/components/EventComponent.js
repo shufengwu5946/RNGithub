@@ -1,4 +1,4 @@
-import React from 'react';
+import React from "react";
 import { StyleSheet, View, Text } from "react-native";
 import { scaleSize } from "~/utils/ScreenUtils";
 import EventType from "~/constants/User/Activity";
@@ -184,92 +184,94 @@ const getEvent = (
 };
 
 const ForkEventComp = props => {
+  const { eventRepo, userName } = props;
   return (
     <View>
       <Text style={styles.eventRepo}>
         <Text style={styles.eventOther}>从</Text>
-        {props.eventRepo}
+        {eventRepo}
         <Text style={styles.eventOther}>{" 创建分支 "}</Text>
-        {`${props.userName}/${
-          props.eventRepo.split("/")[props.eventRepo.split("/").length - 1]
-        }`}
+        {`${userName}/${eventRepo.split("/")[eventRepo.split("/").length - 1]}`}
       </Text>
     </View>
   );
 };
 
 const InstallationRepositoriesEventComp = props => {
+  const { eventActionType } = props;
   return (
     <View>
-      <Text style={styles.eventOther}>{`${
-        props.eventActionType
-      } repository from an installation `}</Text>
+      <Text
+        style={styles.eventOther}
+      >{`${eventActionType} repository from an installation `}</Text>
     </View>
   );
 };
 
 const InstallationEventComp = props => {
+  const { eventActionType } = props;
   return (
     <View>
-      <Text style={styles.eventOther}>{`${
-        props.eventActionType
-      } an GitHub App `}</Text>
+      <Text
+        style={styles.eventOther}
+      >{`${eventActionType} an GitHub App `}</Text>
     </View>
   );
 };
 
 const GollumEventComp = props => {
+  const { eventActionType } = props;
   return (
     <View>
-      <Text style={styles.eventOther}>{`${
-        props.eventActionType
-      } a wiki page `}</Text>
+      <Text style={styles.eventOther}>{`${eventActionType} a wiki page `}</Text>
     </View>
   );
 };
 
 const MarketplacePurchaseEventComp = props => {
+  const { eventActionType } = props;
   return (
     <View>
-      <Text style={styles.eventOther}>{`${
-        props.eventActionType
-      } marketplace plan `}</Text>
+      <Text
+        style={styles.eventOther}
+      >{`${eventActionType} marketplace plan `}</Text>
     </View>
   );
 };
 
 const ProjectEventComp = props => {
+  const { eventActionType } = props;
   return (
     <View>
-      <Text style={styles.eventOther}>{`${
-        props.eventActionType
-      } a project `}</Text>
+      <Text style={styles.eventOther}>{`${eventActionType} a project `}</Text>
     </View>
   );
 };
 
 const PullRequestEventComp = props => {
+  const { eventActionType, eventRepo } = props;
   return (
     <View>
       <Text style={styles.eventRepo}>
-        <Text style={styles.eventOther}>{`${
-          props.eventActionType
-        } pull request `}</Text>
-        {props.eventRepo}
+        <Text
+          style={styles.eventOther}
+        >{`${eventActionType} pull request `}</Text>
+        {eventRepo}
       </Text>
     </View>
   );
 };
 
 const EventComp = props => {
+  const { eventName, eventRef, eventRepo } = props;
   return (
     <View>
       <Text style={styles.eventRepo}>
-        <Text style={styles.eventOther}>{props.eventName}</Text>
+        <Text style={styles.eventOther}>{eventName}</Text>
         <Text style={styles.eventOther}>
-          {props.eventRef ? ` ${props.eventRef} 在` : ""}
+          {eventRef ? ` ${eventRef} 在` : ""}
         </Text>
-        {props.eventRepo}
+        {eventRepo}
       </Text>
     </View>
   );

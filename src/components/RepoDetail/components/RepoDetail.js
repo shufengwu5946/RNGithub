@@ -1,7 +1,6 @@
 import React, { Component } from "react";
 import {
   View,
-  TouchableNativeFeedback,
   Text,
   Clipboard,
   FlatList,
@@ -28,7 +27,7 @@ export default class RepoDetail extends Component {
   static navigationOptions = ({ navigation }) => {
     const title = navigation.getParam("title", "");
     const showMenu = navigation.getParam("showMenu");
-    const star = navigation.getParam("star", false);
+    const star = navigation.getParam("star", true);
     const starRepo = navigation.getParam("starRepo");
     const unstarRepo = navigation.getParam("unstarRepo");
     const showBranchModal = navigation.getParam("showBranchModal");
@@ -37,30 +36,30 @@ export default class RepoDetail extends Component {
       title: title.length > 14 ? title.substring(0, 14) + "..." : title,
       headerRight: (
         <View style={{ flexDirection: "row", alignItems: "center" }}>
-          <TouchableNativeFeedback onPress={star ? unstarRepo : starRepo}>
+          <TouchableOpacity onPress={star ? unstarRepo : starRepo}>
             <MaterialCommunityIcon
               name={star ? "star" : "star-outline"}
               size={scaleSize(40)}
               color="green"
               style={{ marginLeft: scaleSize(25), marginRight: scaleSize(25) }}
             />
-          </TouchableNativeFeedback>
-          <TouchableNativeFeedback onPress={showBranchModal}>
+          </TouchableOpacity>
+          <TouchableOpacity onPress={() => showBranchModal()}>
             <Icon
               name="fork"
               size={scaleSize(40)}
               color="green"
               style={{ marginLeft: scaleSize(25), marginRight: scaleSize(25) }}
             />
-          </TouchableNativeFeedback>
-          <TouchableNativeFeedback onPress={showMenu}>
+          </TouchableOpacity>
+          <TouchableOpacity onPress={showMenu}>
             <Icon
               name="menu-fold"
               size={scaleSize(40)}
               color="green"
               style={{ marginLeft: scaleSize(25), marginRight: scaleSize(25) }}
             />
-          </TouchableNativeFeedback>
+          </TouchableOpacity>
         </View>
       )
     };
@@ -88,18 +87,26 @@ export default class RepoDetail extends Component {
     }
   };
 
+  setBranch = (branch)=>{
+    this.setState({ branch: branch });
+  }
+
+  dismissBranchModal = () => {
+    this.setState({ branchModalVisible: false });
+  };
+
   starRepo = () => {
-    // this.setState({ star: true });
-    this.props.navigation.setParams({
+    const { navigation, token } = this.props;
+    navigation.setParams({
       star: true
     });
     fetchPut(
       STAR_URL(
-        this.props.navigation.getParam("author", ""),
-        this.props.navigation.getParam("title", "")
+        navigation.getParam("author", ""),
+        navigation.getParam("title", "")
       ),
       {
-        Authorization: `token ${this.props.token}`
+        Authorization: `token ${token}`
       },
       {}
     )
@@ -113,16 +120,17 @@ export default class RepoDetail extends Component {
 
   unstarRepo = () => {
     // this.setState({ star: false });
-    this.props.navigation.setParams({
+    const { navigation, token } = this.props;
+    navigation.setParams({
       star: false
     });
     fetchDelete(
       STAR_URL(
-        this.props.navigation.getParam("author", ""),
-        this.props.navigation.getParam("title", "")
+        navigation.getParam("author", ""),
+        navigation.getParam("title", "")
       ),
       {
-        Authorization: `token ${this.props.token}`
+        Authorization: `token ${token}`
       },
       {}
     )
@@ -135,23 +143,24 @@ export default class RepoDetail extends Component {
   };
 
   getRepoStar = () => {
+    const { navigation, token } = this.props;
     fetchGet(
       STAR_URL(
-        this.props.navigation.getParam("author", ""),
-        this.props.navigation.getParam("title", "")
+        navigation.getParam("author", ""),
+        navigation.getParam("title", "")
       ),
       {
-        Authorization: `token ${this.props.token}`
+        Authorization: `token ${token}`
       },
       {}
     )
       .then(data => {
-        this.props.navigation.setParams({
+        navigation.setParams({
           star: true
         });
       })
       .catch(error => {
-        this.props.navigation.setParams({
+        navigation.setParams({
           star: false
         });
         console.log(error);
@@ -159,11 +168,12 @@ export default class RepoDetail extends Component {
   };
 
   getBranchesAndTags = () => {
-    this.props.showLoadingDialog();
+    const { showLoadingDialog, navigation, dismissLoadingDialog } = this.props;
+    showLoadingDialog();
     fetchGet(
       BRANCHES_URL(
-        this.props.navigation.getParam("author", ""),
-        this.props.navigation.getParam("title", "")
+        navigation.getParam("author", ""),
+        navigation.getParam("title", "")
       ),
       {},
       {}
@@ -171,8 +181,8 @@ export default class RepoDetail extends Component {
       .then(branches => {
         fetchGet(
           TAGS_URL(
-            this.props.navigation.getParam("author", ""),
-            this.props.navigation.getParam("title", "")
+            navigation.getParam("author", ""),
+            navigation.getParam("title", "")
           ),
           {},
           {}
@@ -182,31 +192,31 @@ export default class RepoDetail extends Component {
             tagList: tags,
             branchModalVisible: true
           });
-          this.props.dismissLoadingDialog();
+          dismissLoadingDialog();
         });
       })
       .catch(error => {
-        this.props.dismissLoadingDialog();
+        dismissLoadingDialog();
         console.log(error);
       });
   };
 
   constructor(props) {
     super(props);
-    console.log(props.navigation.getParam("defaultBranch", ""));
-
+    const { navigation } = props;
     this.state = {
       page: 0,
       modalMenuVisible: false,
       branchModalVisible: false,
-      defaultBranch: props.navigation.getParam("defaultBranch", ""),
+      branch: navigation.getParam("defaultBranch", ""),
       branchList: [],
       tagList: []
     };
   }
 
   componentDidMount() {
-    this.props.navigation.setParams({
+    const { navigation } = this.props;
+    navigation.setParams({
       showMenu: this.showMenu,
       starRepo: this.starRepo,
       unstarRepo: this.unstarRepo,
@@ -222,11 +232,19 @@ export default class RepoDetail extends Component {
   componentDidUpdate() {}
 
   render() {
-    const { navigation } = this.props;
+    const {
+      navigation,
+      showLoadingDialog,
+      dismissLoadingDialog,
+      getReadme,
+      readme
+    } = this.props;
+    const { branchModalVisible, branchList } = this.state;
     const title = navigation.getParam("title", "");
     const author = navigation.getParam("author", "");
     const description = navigation.getParam("description", "");
     const htmlUrl = navigation.getParam("htmlUrl", "");
+    const defaultBranch = navigation.getParam("defaultBranch", "");
     return (
       <View style={styles.container}>
         <View />
@@ -234,8 +252,11 @@ export default class RepoDetail extends Component {
           title={title}
           author={author}
           description={description}
-          showLoadingDialog={this.props.showLoadingDialog}
-          dismissLoadingDialog={this.props.dismissLoadingDialog}
+          showLoadingDialog={showLoadingDialog}
+          dismissLoadingDialog={dismissLoadingDialog}
+          readme={readme}
+          getReadme={getReadme}
+          defaultBranch={defaultBranch}
         />
         <Menu ref={this.setMenuRef} style={styles.menu}>
           <MenuItem
@@ -312,19 +333,22 @@ export default class RepoDetail extends Component {
             添加书签
           </MenuItem>
         </Menu>
-        <Modal isVisible={this.state.branchModalVisible}>
+        <Modal isVisible={branchModalVisible}>
           <View style={styles.branchModal}>
             <Text style={styles.branchModalTitle}>选择分支或标签</Text>
             <ScrollView>
               <FlatList
-                data={this.state.branchList}
+                data={branchList}
                 renderItem={({ item }) => (
                   <BranchTagListItem
                     type={"branch"}
                     name={item.name}
-                    checked={
-                      item.name === this.state.defaultBranch ? true : false
-                    }
+                    title={title}
+                    author={author}
+                    checked={item.name === this.state.branch ? true : false}
+                    getReadme={getReadme}
+                    dismissBranchModal={() => this.dismissBranchModal()}
+                    setBranch={this.setBranch}
                   />
                 )}
                 keyExtractor={(item, index) => index}
@@ -332,7 +356,16 @@ export default class RepoDetail extends Component {
               <FlatList
                 data={this.state.tagList}
                 renderItem={({ item }) => (
-                  <BranchTagListItem type={"tag"} name={item.name} />
+                  <BranchTagListItem
+                    type={"tag"}
+                    name={item.name}
+                    title={title}
+                    author={author}
+                    checked={item.name === this.state.branch ? true : false}
+                    getReadme={getReadme}
+                    dismissBranchModal={() => this.dismissBranchModal()}
+                    setBranch={this.setBranch}
+                  />
                 )}
                 keyExtractor={(item, index) => index}
               />
@@ -351,34 +384,48 @@ export default class RepoDetail extends Component {
   }
 }
 
-const BranchTagListItem = props => (
-  <TouchableOpacity
-    onPress={() => {
-      
-    }}
-  >
-    <View
-      style={{
-        ...styles.branchTagListItem,
-        backgroundColor: props.checked ? "#DDDDDD" : "white"
+const BranchTagListItem = props => {
+  const {
+    checked,
+    type,
+    name,
+    getReadme,
+    title,
+    author,
+    dismissBranchModal,
+    setBranch
+  } = props;
+  return (
+    <TouchableOpacity
+      onPress={() => {
+        getReadme(title, author, name);
+        setBranch(name);
+        dismissBranchModal();
       }}
     >
-      {props.type === "branch" ? (
-        <Icon
-          name="fork"
-          size={scaleSize(50)}
-          color="green"
-          style={{ marginLeft: scaleSize(25), marginRight: scaleSize(25) }}
-        />
-      ) : (
-        <MaterialCommunityIcon
-          name="tag-outline"
-          size={scaleSize(50)}
-          color="green"
-          style={{ marginLeft: scaleSize(25), marginRight: scaleSize(25) }}
-        />
-      )}
-      <Text style={styles.item}>{props.name}</Text>
-    </View>
-  </TouchableOpacity>
-);
+      <View
+        style={{
+          ...styles.branchTagListItem,
+          backgroundColor: checked ? "#DDDDDD" : "white"
+        }}
+      >
+        {type === "branch" ? (
+          <Icon
+            name="fork"
+            size={scaleSize(50)}
+            color="green"
+            style={{ marginLeft: scaleSize(25), marginRight: scaleSize(25) }}
+          />
+        ) : (
+          <MaterialCommunityIcon
+            name="tag-outline"
+            size={scaleSize(50)}
+            color="green"
+            style={{ marginLeft: scaleSize(25), marginRight: scaleSize(25) }}
+          />
+        )}
+        <Text style={styles.item}>{name}</Text>
+      </View>
+    </TouchableOpacity>
+  );
+};

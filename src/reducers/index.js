@@ -18,6 +18,7 @@ import {
   reposCount
 } from "./Main/User/UserTabView/InfoPage";
 import { loadingDialog } from "./Common";
+import { readme } from "./RepoDetail/TabView/Info";
 
 const reducer = combineReducers({
   userName,
@@ -36,7 +37,8 @@ const reducer = combineReducers({
   followersCount,
   followingCount,
   reposCount,
-  loadingDialog
+  loadingDialog,
+  readme
 });
 
 export default reducer;

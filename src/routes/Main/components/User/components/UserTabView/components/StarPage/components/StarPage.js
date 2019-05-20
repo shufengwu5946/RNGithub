@@ -25,13 +25,12 @@ const listItemFunc = ({ item }) => (
 );
 
 export default function StarPage(props) {
+  const { token } = props;
   const fetchFunc = aimPage => {
-    console.log(props.token);
-
     return fetchGet(
       STARRED_URL,
       {
-        Authorization: `token ${props.token}`
+        Authorization: `token ${token}`
       },
       {
         page: aimPage

@@ -22,24 +22,23 @@ const PressContext = React.createContext({
 class FileListItem extends Component {
   render() {
     const contextState = this.context;
+    const { fileType, fileName } = this.props;
     return (
       <TouchableNativeFeedback
         onPress={() =>
-          this.props.fileType === "file"
+          fileType === "file"
             ? Alert.alert("不是文件夹")
-            : contextState.handlePress(this.props.fileName)
+            : contextState.handlePress(fileName)
         }
       >
         <View style={styles.fileListItem}>
           <Icon
             style={styles.fileListItemIcon}
-            name={this.props.fileType === "file" ? "filetext1" : "folder1"}
+            name={fileType === "file" ? "filetext1" : "folder1"}
             size={scaleSize(44)}
             color={"green"}
           />
-          <Text style={styles.fileListItemText}>{`${
-            this.props.fileName
-          }`}</Text>
+          <Text style={styles.fileListItemText}>{`${fileName}`}</Text>
         </View>
       </TouchableNativeFeedback>
     );
@@ -66,8 +65,8 @@ const arrangeData = data => {
 };
 
 function FileList(props) {
-  const fetchFunc = () =>
-    fetchGet(CONTENTS_URL(props.owner, props.repo, props.path), {}, {});
+  const { owner, repo, path } = props;
+  const fetchFunc = () => fetchGet(CONTENTS_URL(owner, repo, path), {}, {});
   const FileList = withRefreshListWithoutLoadMore(
     listItemFunc,
     fetchFunc,
@@ -100,6 +99,7 @@ class FileExplorer extends PureComponent {
   }
 
   render() {
+    const { owner, repo } = this.props;
     return (
       <PressContext.Provider value={this.state}>
         <View style={styles.explorer}>
@@ -119,11 +119,7 @@ class FileExplorer extends PureComponent {
             <View style={styles.pathUnderLine} />
           </View>
           <View style={styles.fileList}>
-            <FileList
-              owner={this.props.owner}
-              repo={this.props.repo}
-              path={this.state.path}
-            />
+            <FileList owner={owner} repo={repo} path={this.state.path} />
           </View>
         </View>
       </PressContext.Provider>
@@ -133,14 +129,13 @@ class FileExplorer extends PureComponent {
 
 class PathItem extends Component {
   render() {
+    const { index, pathName } = this.props;
     return (
       <TouchableNativeFeedback
-        onPress={() => this.context.handlePathPress(this.props.index)}
+        onPress={() => this.context.handlePathPress(index)}
       >
         <View>
-          <Text style={styles.pathItem}>{`    ${
-            this.props.pathName
-          }    >`}</Text>
+          <Text style={styles.pathItem}>{`    ${pathName}    >`}</Text>
         </View>
       </TouchableNativeFeedback>
     );

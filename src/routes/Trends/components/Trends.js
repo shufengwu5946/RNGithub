@@ -52,29 +52,32 @@ const TrendsList = props => (
   />
 );
 
-const TrendsListItem = props => (
-  <TouchableOpacity
-    onPress={() => {
-      NavigationService.navigate(props.page);
-    }}
-  >
-    <CardView
-      style={{
-        marginTop: scaleSize(10),
-        marginLeft: scaleSize(10),
-        marginRight: scaleSize(10),
-        marginBottom: scaleSize(10)
+const TrendsListItem = props => {
+  const { page, iconName, children } = props;
+  return (
+    <TouchableOpacity
+      onPress={() => {
+        NavigationService.navigate(page);
       }}
-      cardElevation={scaleSize(5)}
     >
-      <View style={styles.item}>
-        <MaterialCommunityIcon
-          name={props.iconName}
-          size={scaleSize(120)}
-          color="green"
-        />
-        <Text style={styles.itemText}>{props.children}</Text>
-      </View>
-    </CardView>
-  </TouchableOpacity>
-);
+      <CardView
+        style={{
+          marginTop: scaleSize(10),
+          marginLeft: scaleSize(10),
+          marginRight: scaleSize(10),
+          marginBottom: scaleSize(10)
+        }}
+        cardElevation={scaleSize(5)}
+      >
+        <View style={styles.item}>
+          <MaterialCommunityIcon
+            name={iconName}
+            size={scaleSize(120)}
+            color="green"
+          />
+          <Text style={styles.itemText}>{children}</Text>
+        </View>
+      </CardView>
+    </TouchableOpacity>
+  );
+};

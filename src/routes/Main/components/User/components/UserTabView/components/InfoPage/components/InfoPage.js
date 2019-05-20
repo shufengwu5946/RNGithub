@@ -19,10 +19,14 @@ export default class InfoPage extends Component {
     super(props);
   }
 
-  componentDidMount() {
-  }
+  componentDidMount() {}
 
   _onPress(itemText) {
+    const {
+      setRepoListType,
+      setRepoListSort,
+      setRepoListTypeItems
+    } = this.props;
     switch (itemText) {
       case "跟随者":
         NavigationService.navigate("FollowerListPage");
@@ -31,9 +35,9 @@ export default class InfoPage extends Component {
         Alert.alert("跟随");
         break;
       case "版本库":
-        this.props.setRepoListType("全部");
-        this.props.setRepoListSort("名称升序");
-        this.props.setRepoListTypeItems(myTypeArray);
+        setRepoListType("全部");
+        setRepoListSort("名称升序");
+        setRepoListTypeItems(myTypeArray);
         NavigationService.navigate("RepoListPage");
         break;
       default:
@@ -42,6 +46,7 @@ export default class InfoPage extends Component {
   }
 
   render() {
+    const { name, followersCount, reposCount, followingCount } = this.props;
     return (
       <View>
         <CardView
@@ -54,20 +59,20 @@ export default class InfoPage extends Component {
           cardElevation={scaleSize(5)}
         >
           <View style={styles.container}>
-            <Text style={styles.name}>{this.props.name}</Text>
+            <Text style={styles.name}>{name}</Text>
             <View style={styles.list}>
               <ListItem
-                itemCount={this.props.followersCount}
+                itemCount={followersCount}
                 itemText={"跟随者"}
                 _onPress={this._onPress.bind(this, "跟随者")}
               />
               <ListItem
-                itemCount={this.props.followingCount}
+                itemCount={followingCount}
                 itemText={"跟随"}
                 _onPress={this._onPress.bind(this, "跟随")}
               />
               <ListItem
-                itemCount={this.props.reposCount}
+                itemCount={reposCount}
                 itemText={"版本库"}
                 _onPress={this._onPress.bind(this, "版本库")}
               />
@@ -85,11 +90,12 @@ class ListItem extends Component {
   }
 
   render() {
+    const { _onPress, itemCount, itemText } = this.props;
     return (
-      <TouchableNativeFeedback onPress={this.props._onPress}>
+      <TouchableNativeFeedback onPress={_onPress}>
         <View style={styles.listItem}>
-          <Text style={styles.listItemCount}>{this.props.itemCount}</Text>
-          <Text style={styles.listItemText}>{this.props.itemText}</Text>
+          <Text style={styles.listItemCount}>{itemCount}</Text>
+          <Text style={styles.listItemText}>{itemText}</Text>
         </View>
       </TouchableNativeFeedback>
     );

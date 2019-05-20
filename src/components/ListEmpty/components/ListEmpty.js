@@ -8,10 +8,11 @@ class ListEmpty extends Component {
   }
 
   render() {
+    const { _onPress } = this.props;
     return (
       <View style={styles.container}>
         <Text style={styles.listNull}>列表为空</Text>
-        <Text style={styles.refresh} onPress={this.props._onPress}>
+        <Text style={styles.refresh} onPress={_onPress}>
           重新加载
         </Text>
       </View>

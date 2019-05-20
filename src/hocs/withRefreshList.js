@@ -10,14 +10,15 @@ class ListEmpty extends Component {
   }
 
   render() {
+    const { refreshing, _onPress } = this.props;
     return (
       <View style={styles.container}>
-        {this.props.refreshing ? (
+        {refreshing ? (
           <View />
         ) : (
           <View>
             <Text style={styles.listNull}>列表为空</Text>
-            <TouchableNativeFeedback onPress={this.props._onPress}>
+            <TouchableNativeFeedback onPress={_onPress}>
               <Text style={styles.refresh}>点击重新加载</Text>
             </TouchableNativeFeedback>
           </View>
@@ -33,9 +34,10 @@ class ListFooterLoadMoreFinish extends Component {
   }
 
   render() {
+    const { loadMoreFinish } = this.props;
     return (
       <View>
-        {this.props.loadMoreFinish ? (
+        {loadMoreFinish ? (
           <View style={styles.loadMoreFinishContainer}>
             <Text style={styles.loadMoreFinishContent}>没有更多数据了！</Text>
           </View>
@@ -101,8 +103,6 @@ export default function withRefreshList(listItemFunc, fetchFunc) {
     }
 
     render() {
-      console.log(this.state.data);
-      
       return (
         <View>
           <FlatList
@@ -138,7 +138,6 @@ export default function withRefreshList(listItemFunc, fetchFunc) {
       fetchFunc(this.state.page)
         .then(data => {
           if (isRefresh) {
-            console.log(data);
             this.setState({
               data: data,
               refreshing: false,

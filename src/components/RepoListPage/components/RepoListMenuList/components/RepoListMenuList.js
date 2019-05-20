@@ -8,13 +8,14 @@ class RepoListMenuList extends Component {
   componentDidMount() {}
 
   render() {
+    const { repoListTypeItems, repoListType, repoListSort } = this.props;
     return (
       <View style={{ flex: 1 }}>
         <SectionList
           sections={[
             {
               title: "类型",
-              data: this.props.repoListTypeItems
+              data: repoListTypeItems
             },
             {
               title: "排序",
@@ -25,17 +26,11 @@ class RepoListMenuList extends Component {
             <Text
               style={{
                 backgroundColor:
-                  [
-                    this.props.repoListType,
-                    this.props.repoListSort
-                  ].indexOf(item) === -1
+                  [repoListType, repoListSort].indexOf(item) === -1
                     ? "white"
                     : "#DDDDDD",
                 color:
-                  [
-                    this.props.repoListType,
-                    this.props.repoListSort
-                  ].indexOf(item) === -1
+                  [repoListType, repoListSort].indexOf(item) === -1
                     ? "black"
                     : "green",
                 ...styles.item

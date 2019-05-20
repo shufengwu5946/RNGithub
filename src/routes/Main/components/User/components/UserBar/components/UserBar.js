@@ -12,20 +12,19 @@ export default class UserBar extends Component {
   }
 
   componentDidMount() {
-    this.props.getUserInfo();
+    const { getUserInfo } = this.props;
+    getUserInfo();
   }
 
   render() {
+    const { avatarUrl, login, createdAt } = this.props;
     return (
       <View style={styles.container}>
-        <FastImage
-          style={styles.avatar}
-          source={{ uri: this.props.avatarUrl }}
-        />
+        <FastImage style={styles.avatar} source={{ uri: avatarUrl }} />
         <View style={styles.userInfo}>
-          <Text style={styles.userName}>{this.props.login}</Text>
+          <Text style={styles.userName}>{login}</Text>
           <Text style={styles.userJoinDate}>{`加入时间 ${utc2beijing(
-            this.props.createdAt
+            createdAt
           )}`}</Text>
         </View>
       </View>

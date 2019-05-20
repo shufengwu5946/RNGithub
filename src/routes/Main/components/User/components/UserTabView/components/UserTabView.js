@@ -11,33 +11,37 @@ const LazyPlaceholder = ({ route }) => (
 );
 
 export default class UserTabView extends React.Component {
-  state = {
-    index: 0,
-    routes: this.props.routes
-  };
+  constructor(props) {
+    super(props);
+    const { routes } = props;
+    this.state = {
+      index: 0,
+      routes: routes
+    };
+  }
 
   _renderLazyPlaceholder = ({ route }) => <LazyPlaceholder route={route} />;
 
   render() {
+    const { scenes } = this.props;
     return (
       <TabView
         lazy
         navigationState={this.state}
-        renderScene={SceneMap(this.props.scenes)}
+        renderScene={SceneMap(scenes)}
         onIndexChange={index => this.setState({ index })}
         initialLayout={{ width: Dimensions.get("window").width }}
         renderTabBar={props => (
           <TabBar
             {...props}
             indicatorStyle={{ backgroundColor: "green" }}
-            style={{ backgroundColor: 'white' }}
+            style={{ backgroundColor: "white" }}
             labelStyle={{
-              fontSize: scaleSize(30),
+              fontSize: scaleSize(30)
             }}
             activeColor="green"
             inactiveColor="gray"
             contentContainerStyle={{ height: scaleSize(100) }}
-            
           />
         )}
         renderLazyPlaceholder={this._renderLazyPlaceholder}

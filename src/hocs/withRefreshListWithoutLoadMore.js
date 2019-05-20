@@ -10,14 +10,15 @@ class ListEmpty extends Component {
   }
 
   render() {
+    const { refreshing, _onPress } = this.props;
     return (
       <View style={styles.container}>
-        {this.props.refreshing ? (
+        {refreshing ? (
           <View />
         ) : (
           <View>
             <Text style={styles.listNull}>列表为空</Text>
-            <TouchableNativeFeedback onPress={this.props._onPress}>
+            <TouchableNativeFeedback onPress={_onPress}>
               <Text style={styles.refresh}>点击重新加载</Text>
             </TouchableNativeFeedback>
           </View>

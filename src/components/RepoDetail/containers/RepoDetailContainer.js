@@ -4,9 +4,11 @@ import {
   showLoadingDialog as showLoadingD,
   dismissLoadingDialog as dismissLoadingD
 } from "../../../actions/Common";
+import { getReadme as getRm } from "../../../actions/RepoDetail/TabView/Info";
 
 const mapStateToProps = state => ({
-  token: state.token
+  token: state.token,
+  readme: state.readme
 });
 
 const mapDispatchToProps = dispatch => ({
@@ -15,6 +17,9 @@ const mapDispatchToProps = dispatch => ({
   },
   dismissLoadingDialog: () => {
     dispatch(dismissLoadingD());
+  },
+  getReadme: (title, author, defaultBranch) => {
+    dispatch(getRm(title, author, defaultBranch));
   }
 });
 

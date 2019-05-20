@@ -20,6 +20,7 @@ class App extends Component {
     super(props);
   }
   render() {
+    const { loadingDialog } = this.props;
     return (
       <View style={{ flex: 1 }}>
         <AppContainer
@@ -27,7 +28,12 @@ class App extends Component {
             NavigationService.setTopLevelNavigator(navigatorRef);
           }}
         />
-        <Dialog visible={this.props.loadingDialog}>
+        <Dialog
+          visible={loadingDialog}
+          onHardwareBackPress={() => {
+            return true;
+          }}
+        >
           <DialogContent>
             <View
               style={{

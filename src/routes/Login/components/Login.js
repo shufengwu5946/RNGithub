@@ -11,12 +11,21 @@ export default class Login extends React.Component {
   }
 
   componentDidUpdate() {
-    if (this.props.loginSuccStatus) {
-      this.props.navigation.navigate("MainStack");
+    const { loginSuccStatus, navigation } = this.props;
+    if (loginSuccStatus) {
+      navigation.navigate("MainStack");
     }
   }
 
   render() {
+    const {
+      userName,
+      setUserName,
+      password,
+      setPassword,
+      handlePress,
+      loading
+    } = this.props;
     return (
       <View style={styles.container}>
         <StatusBar barStyle="dark-content" backgroundColor="#ffffff" />
@@ -32,9 +41,9 @@ export default class Login extends React.Component {
           clear
           editable={true}
           disabled={false}
-          value={this.props.userName}
+          value={userName}
           onChange={value => {
-            this.props.setUserName(value);
+            setUserName(value);
           }}
           placeholder="用户名"
         >
@@ -45,9 +54,9 @@ export default class Login extends React.Component {
           clear
           editable={true}
           disabled={false}
-          value={this.props.password}
+          value={password}
           onChange={value => {
-            this.props.setPassword(value);
+            setPassword(value);
           }}
           placeholder="密码"
           type="password"
@@ -56,11 +65,11 @@ export default class Login extends React.Component {
         </InputItem>
         <Button
           style={styles.loginButton}
-          onPress={() => this.props.handlePress()}
-          loading={this.props.loading}
-          disabled={this.props.loading}
+          onPress={() => handlePress()}
+          loading={loading}
+          disabled={loading}
         >
-          {this.props.loading ? "登录中..." : "登录"}
+          {loading ? "登录中..." : "登录"}
         </Button>
       </View>
     );

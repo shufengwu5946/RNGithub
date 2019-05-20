@@ -12,11 +12,12 @@ import { fetchGet } from "~/fetch";
 const listItemFunc = ({ item }) => <ActivityListItem item={item} />;
 
 export default function ActivityPage(props) {
+  const { login, token } = props;
   const fetchFunc = aimPage =>
     fetchGet(
-      EVENTS_URL(props.login),
+      EVENTS_URL(login),
       {
-        Authorization: `token ${props.token}`
+        Authorization: `token ${token}`
       },
       {
         page: aimPage

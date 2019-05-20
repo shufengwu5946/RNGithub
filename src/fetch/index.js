@@ -44,7 +44,6 @@ function handleOctetStreamResponse(response) {
 }
 
 function handleResponse(response) {
-  console.log(response);
   const contentType = response.headers.get("content-type");
   if (contentType.includes("application/json")) {
     return handleJSONResponse(response);

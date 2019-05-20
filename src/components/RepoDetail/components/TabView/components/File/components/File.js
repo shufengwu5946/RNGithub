@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { View, Text,Alert } from "react-native";
+import { View, Text, Alert } from "react-native";
 import FileExplorer from "../../../../../../FileExplorer";
 
 export default class File extends Component {
@@ -14,9 +14,10 @@ export default class File extends Component {
   }
 
   render() {
+    const { author, title } = this.props;
     return (
       <View style={{ flex: 1 }}>
-        <FileExplorer owner={this.props.author} repo={this.props.title} />
+        <FileExplorer owner={author} repo={title} />
       </View>
     );
   }

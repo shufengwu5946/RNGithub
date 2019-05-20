@@ -28,6 +28,16 @@ export default class TabView extends React.Component {
   _renderLazyPlaceholder = ({ route }) => <LazyPlaceholder route={route} />;
 
   render() {
+    const {
+      title,
+      author,
+      description,
+      showLoadingDialog,
+      dismissLoadingDialog,
+      readme,
+      getReadme,
+      defaultBranch
+    } = this.props;
     return (
       <TV
         lazy
@@ -38,38 +48,41 @@ export default class TabView extends React.Component {
               return (
                 <Info
                   jumpTo={jumpTo}
-                  title={this.props.title}
-                  author={this.props.author}
-                  description={this.props.description}
-                  showLoadingDialog={this.props.showLoadingDialog}
-                  dismissLoadingDialog = {this.props.dismissLoadingDialog}
+                  title={title}
+                  author={author}
+                  description={description}
+                  showLoadingDialog={showLoadingDialog}
+                  dismissLoadingDialog={dismissLoadingDialog}
+                  readme={readme}
+                  getReadme={getReadme}
+                  defaultBranch={defaultBranch}
                 />
               );
             case "file":
               return (
                 <File
                   jumpTo={jumpTo}
-                  title={this.props.title}
-                  author={this.props.author}
-                  description={this.props.description}
+                  title={title}
+                  author={author}
+                  description={description}
                 />
               );
             case "activity":
               return (
                 <Activity
                   jumpTo={jumpTo}
-                  title={this.props.title}
-                  author={this.props.author}
-                  description={this.props.description}
+                  title={title}
+                  author={author}
+                  description={description}
                 />
               );
             case "commit":
               return (
                 <Commit
                   jumpTo={jumpTo}
-                  title={this.props.title}
-                  author={this.props.author}
-                  description={this.props.description}
+                  title={title}
+                  author={author}
+                  description={description}
                 />
               );
           }

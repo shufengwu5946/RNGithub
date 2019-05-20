@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { View, Text, ScrollView, WebView, Alert } from "react-native";
+import { View, Text, ScrollView, Alert, WebView } from "react-native";
 import { README_URL } from "~/constants/Fetch";
 import { fetchGet } from "~/fetch";
 import styles from "./InfoStyles";
@@ -7,50 +7,33 @@ import styles from "./InfoStyles";
 export default class Info extends Component {
   constructor(props) {
     super(props);
-    // const routes = [{ key: "info", title: "信息" }];
-
-    this.state = {
-      readme: ""
-    };
-  }
-
-  getReadme() {
-    // Alert.alert("hehe");
-    this.props.showLoadingDialog();
-    fetchGet(
-      README_URL(this.props.title, this.props.author),
-      { Accept: "application/vnd.github.VERSION.html" },
-      {}
-    )
-      .then(data => {
-        this.setState({
-          readme: data,
-          title: this.props.title
-        });
-        // this.props.dismissLoadingDialog();
-      })
-      .catch(error => {
-        this.props.dismissLoadingDialog();
-        console.error(error);
-      });
   }
 
   componentDidMount() {
-    this.getReadme();
+    const { getReadme, title, author, defaultBranch } = this.props;
+    getReadme(title, author, defaultBranch);
   }
+
   render() {
+    const {
+      title,
+      description,
+      readme,
+      dismissLoadingDialog,
+      showLoadingDialog
+    } = this.props;
     return (
       <ScrollView style={styles.container}>
         <View style={styles.border}>
           <Text style={styles.title} ellipsizeMode="tail" numberOfLines={1}>
-            {this.props.title}
+            {title}
           </Text>
-          <Text style={styles.description}>{this.props.description}</Text>
+          <Text style={styles.description}>{description}</Text>
         </View>
         <Readme
-          readme={this.state.readme}
-          showLoadingDialog={this.props.showLoadingDialog}
-          dismissLoadingDialog={this.props.dismissLoadingDialog}
+          readme={readme}
+          dismissLoadingDialog={dismissLoadingDialog}
+          showLoadingDialog={showLoadingDialog}
         />
       </ScrollView>
     );
@@ -95,11 +78,12 @@ class Readme extends Component {
   };
 
   render() {
+    const { readme, dismissLoadingDialog, showLoadingDialog } = this.props;
     return (
       <ScrollView nestedScrollEnabled={true}>
         <View style={{ height: this.state.height, ...styles.border }}>
           <WebView
-            source={{ html: this.props.readme }}
+            source={{ html: readme }}
             javaScriptEnabled={true}
             style={{
               height: this.state.height
@@ -107,15 +91,11 @@ class Readme extends Component {
             onMessage={event => this.onMessage(event)}
             injectedJavaScript={this.getHtmlHeight}
             onLoadStart={() => {
-              {
-                /* this.props.showLoadingDialog(); */
-              }
+              showLoadingDialog();
             }}
             onLoad={() => {}}
             onLoadEnd={() => {
-              if (this.props.readme !== "") {
-                this.props.dismissLoadingDialog();
-              }
+              dismissLoadingDialog();
             }}
             onError={() => {
               Alert.alert("README 加载失败！");

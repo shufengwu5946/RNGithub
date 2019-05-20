@@ -12,6 +12,7 @@ export default class ModalMenu extends Component {
   }
 
   render() {
+    const { children } = this.props;
     return (
       <Modal
         animationType="fade"
@@ -22,7 +23,7 @@ export default class ModalMenu extends Component {
         }}
         presentationStyle="formSheet"
       >
-        {this.props.children}
+        {children}
       </Modal>
     );
   }
